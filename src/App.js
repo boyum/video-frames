@@ -16,7 +16,7 @@ export default function App() {
     const frames = await VideoToFrames.getFrames(
       fileUrl,
       30,
-      VideoToFramesMethod.totalFrames
+      VideoToFramesMethod.TotalFrames
     );
 
     setStatus("IDLE");

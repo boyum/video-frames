@@ -1,6 +1,6 @@
 export enum VideoToFramesMethod {
-  fps,
-  totalFrames
+  Fps,
+  TotalFrames
 }
 
 export class VideoToFrames {
@@ -13,7 +13,7 @@ export class VideoToFrames {
   public static getFrames(
     videoUrl: string,
     amount: number,
-    type: VideoToFramesMethod = VideoToFramesMethod.fps
+    type: VideoToFramesMethod = VideoToFramesMethod.Fps
   ): Promise<string[]> {
     return new Promise(
       (
@@ -34,7 +34,7 @@ export class VideoToFrames {
           duration = video.duration;
 
           let totalFrames: number = amount;
-          if (type === VideoToFramesMethod.fps) {
+          if (type === VideoToFramesMethod.Fps) {
             totalFrames = duration * amount;
           }
           for (let time = 0; time < duration; time += duration / totalFrames) {
