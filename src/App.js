@@ -29,6 +29,7 @@ export default function App() {
     <div className="container">
       <h1>Get frames from video 🎞</h1>
       <p>Upload a video, then click the images you want to download!</p>
+      <p className="notice">Note: The video stays safely on your device. It's never actually uploaded to our servers.</p>
       <label>
         {status === "IDLE" ? (
           "Choose file"
