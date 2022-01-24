@@ -1,7 +1,7 @@
+import { useState } from "react";
+import { Loader } from "react-loader-spinner";
 import "./styles.css";
 import { VideoToFrames, VideoToFramesMethod } from "./VideoToFrame";
-import { useState } from "react";
-import Loader from "react-loader-spinner";
 
 export default function App() {
   const [images, setImages] = useState([]);
@@ -29,7 +29,10 @@ export default function App() {
     <div className="container">
       <h1>Get frames from video 🎞</h1>
       <p>Upload a video, then click the images you want to download!</p>
-      <p className="notice">Note: The video stays safely on your device. It's never actually uploaded to our servers.</p>
+      <p className="notice">
+        Note: The video stays safely on your device. It's never actually
+        uploaded to our servers.
+      </p>
       <label>
         {status === "IDLE" ? (
           "Choose file"
