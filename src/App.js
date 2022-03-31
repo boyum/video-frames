@@ -1,7 +1,9 @@
+// @ts-check
+
 import "./styles.css";
 import { VideoToFrames, VideoToFramesMethod } from "./VideoToFrame";
 import { useState } from "react";
-import Loader from "react-loader-spinner";
+import { Grid } from "react-loader-spinner";
 
 export default function App() {
   const [images, setImages] = useState([]);
@@ -34,7 +36,7 @@ export default function App() {
         {status === "IDLE" ? (
           "Choose file"
         ) : (
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+          <Grid color="#00BFFF" height={100} width={100} />
         )}
         <input
           type="file"
