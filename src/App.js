@@ -18,7 +18,7 @@ export default function App() {
     const frames = await VideoToFrames.getFrames(
       fileUrl,
       30,
-      VideoToFramesMethod.TotalFrames
+      VideoToFramesMethod.TotalFrames,
     );
 
     setStatus("IDLE");
@@ -29,9 +29,7 @@ export default function App() {
 
   return (
     <div className="container">
-      <h1>Get frames from video 🎞</h1>
-      <p>Upload a video, then click the images you want to download!</p>
-      <p className="notice">Note: The video stays safely on your device. It's never actually uploaded to our servers.</p>
+      <h1>Get the frames from your video&nbsp;🎞</h1>
       <label>
         {status === "IDLE" ? (
           "Choose file"
@@ -46,7 +44,7 @@ export default function App() {
         />
       </label>
 
-      {images?.length > 0 && (
+      {images?.length > 0 ? (
         <div className="output">
           {images.map((imageUrl, index) => (
             <a
@@ -54,13 +52,22 @@ export default function App() {
               href={imageUrl}
               download={`${now}-${index + 1}.png`}
             >
-              <span class="visually-hidden">
+              <span className="visually-hidden">
                 Download image number {index + 1}
               </span>
               <img src={imageUrl} alt="" />
             </a>
           ))}
         </div>
+      ) : (
+        <>
+          <p>Upload a video, then click the images you want to download!</p>
+          <p className="notice">
+            <strong>Note:</strong> The video stays safely on your device. It's
+            never actually uploaded anywhere. You can test this by opening this
+            site, then disconnect from the internet before you start using it.
+          </p>
+        </>
       )}
     </div>
   );
