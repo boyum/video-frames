@@ -1,1 +1,5 @@
-{}
+{
+  "manifest_version": 3,
+  "version": "2023-07-15",
+  "name": "video-frames"
+}
