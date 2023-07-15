@@ -5,8 +5,12 @@ html {
 
 body {
   align-items: center;
-  background-color: cornflowerblue;
-  /* background-image: conic-gradient(red, cyan, hotpink, rebeccapurple, red); */
+  background-color: hsl(162.82deg 97.55% 44.96%);
+  background-image: linear-gradient(
+    to bottom,
+    hsl(162.82deg 97.55% 44.96%),
+    cyan
+  );
   color: #111;
   display: flex;
   justify-content: center;
