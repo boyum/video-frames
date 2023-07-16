@@ -1,29 +1,32 @@
 // @ts-check
 
-import "./styles.css";
-import { VideoToFrames, VideoToFramesMethod } from "./VideoToFrame";
 import { useState } from "react";
 import { Grid } from "react-loader-spinner";
+import "./styles.css";
+import { VideoToFrames, VideoToFramesEnum } from "./VideoToFrame";
 
 export default function App() {
   const [images, setImages] = useState([]);
   const [status, setStatus] = useState("IDLE");
 
-  const onInput = async (event) => {
+  /**
+   * @param {import('react').ChangeEvent<HTMLInputElement>} event
+   */
+  async function onInput(event) {
     setImages([]);
     setStatus("LOADING");
 
-    const [file] = event.target.files;
+    const [file] = Array.from(event.target.files);
     const fileUrl = URL.createObjectURL(file);
     const frames = await VideoToFrames.getFrames(
       fileUrl,
       30,
-      VideoToFramesMethod.TotalFrames,
+      VideoToFramesEnum.TotalFrames,
     );
 
     setStatus("IDLE");
     setImages(frames);
-  };
+  }
 
   const now = new Date().toDateString();
 
@@ -40,7 +43,7 @@ export default function App() {
           type="file"
           className="visually-hidden"
           accept="video/*"
-          onChange={onInput}
+          onChange={(event) => onInput(event)}
         />
       </label>
 
