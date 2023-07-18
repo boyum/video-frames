@@ -1,10 +1,9 @@
-// @ts-check
-
 import * as isIOS from "is-ios";
 
 export class VideoToFrames {
   /**
    * Extracts frames from the video and returns them as an array of imageData
+   *
    * @param videoUrl url to the video file (html5 compatible format) eg: mp4
    * @param amount number of frames per second or total number of frames that you want to extract
    * @param type The method of extracting frames: Number of frames per second of video or the total number of frames across the whole video duration. Defaults to fps
@@ -17,12 +16,12 @@ export class VideoToFrames {
     return new Promise<Array<string>>((resolve) => {
       let frames: Array<string> = [];
       let canvas = document.createElement("canvas");
-      let context = canvas.getContext("2d");
+      let context = canvas.getContext("2d")!;
       let duration: number;
       let video = document.createElement("video");
       video.preload = "auto";
 
-      video.addEventListener("loadeddata", async function () {
+      video.addEventListener("loadeddata", async () => {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         duration = video.duration;
@@ -57,12 +56,16 @@ export class VideoToFrames {
     time: number,
   ): Promise<string> {
     return new Promise<string>((resolve) => {
-      let eventCallback = () => {
-        video.removeEventListener("seeked", eventCallback);
-        this.storeFrame(video, context, canvas, resolve);
-      };
+      video.addEventListener(
+        "seeked",
+        () => {
+          this.storeFrame(video, context, canvas, resolve);
+        },
+        {
+          once: true,
+        },
+      );
 
-      video.addEventListener("seeked", eventCallback);
       video.currentTime = time;
     });
   }

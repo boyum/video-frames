@@ -70,37 +70,6 @@ label {
   width: fit-content;
 }
 
-.output {
-  border-radius: 0.75em;
-  display: grid;
-  gap: 0.5rem;
-  max-width: 95%;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.image-button {
-  background-color: transparent;
-  background-image: none;
-  border-radius: 0.25rem;
-  border: none;
-  padding: 0;
-}
-
-.image {
-  border-radius: inherit;
-  object-fit: contain;
-  max-height: 95vh;
-  width: 100%;
-}
-
-.image--full-screen {
-  inset: 50%;
-  position: fixed;
-  transform: translateX(-50%) translateY(-50%);
-  width: calc(100vw - 1rem);
-  z-index: var(--fullscreen-image-z);
-}
-
 .backdrop {
   background-color: rgba(0, 0, 0, 0.3);
   inset: 0;

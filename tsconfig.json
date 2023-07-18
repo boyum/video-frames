@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "jsx": "react-jsx",
-    "noEmit": true
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true
   },
-  "include": ["src"]
+  "include": ["src", "index.d.ts"]
 }
