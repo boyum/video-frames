@@ -1,0 +1,22 @@
+.button {
+  background-color: transparent;
+  background-image: none;
+  border-radius: 0.25rem;
+  border: none;
+  padding: 0;
+}
+
+.image {
+  border-radius: inherit;
+  object-fit: contain;
+  max-height: 95vh;
+  width: 100%;
+}
+
+.fullScreen {
+  inset: 50%;
+  position: fixed;
+  transform: translateX(-50%) translateY(-50%);
+  width: calc(100vw - 1rem);
+  z-index: var(--fullscreen-image-z);
+}
