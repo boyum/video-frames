@@ -1,34 +1,39 @@
 // @ts-check
 
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Grid } from "react-loader-spinner";
 import "./styles.css";
-import { VideoToFrames, VideoToFramesEnum } from "./VideoToFrame";
+import { VideoToFrames } from "./VideoToFrame";
+import { DownloadableImage } from "./DownloadableImage";
+
+type Status = "IDLE" | "LOADING";
 
 export default function App() {
-  const [images, setImages] = useState([]);
-  const [status, setStatus] = useState("IDLE");
+  const [images, setImages] = useState<Array<string>>([]);
+  const [status, setStatus] = useState<Status>("IDLE");
+  const [showBackdrop, setShowBackdrop] = useState(false);
 
-  /**
-   * @param {import('react').ChangeEvent<HTMLInputElement>} event
-   */
-  async function onInput(event) {
+  async function onInput(event: ChangeEvent<HTMLInputElement>) {
     setImages([]);
     setStatus("LOADING");
 
     const [file] = Array.from(event.target.files);
     const fileUrl = URL.createObjectURL(file);
-    const frames = await VideoToFrames.getFrames(
-      fileUrl,
-      30,
-      VideoToFramesEnum.TotalFrames,
-    );
+    const frames = await VideoToFrames.getFrames(fileUrl, 30, "TotalFrames");
 
     setStatus("IDLE");
     setImages(frames);
   }
 
-  const now = new Date().toDateString();
+  const toggleBackdrop = () => {
+    if (showBackdrop) {
+      document.body.classList.remove("overflow-hidden");
+    } else {
+      document.body.classList.add("overflow-hidden");
+    }
+
+    setShowBackdrop(!showBackdrop);
+  };
 
   return (
     <div className="container">
@@ -50,21 +55,19 @@ export default function App() {
       {images?.length > 0 ? (
         <div className="output">
           {images.map((imageUrl, index) => (
-            <a
+            <DownloadableImage
               key={imageUrl}
-              href={imageUrl}
-              download={`${now}-${index + 1}.png`}
-            >
-              <span className="visually-hidden">
-                Download image number {index + 1}
-              </span>
-              <img src={imageUrl} alt="" />
-            </a>
+              imageUrl={imageUrl}
+              index={index}
+              onFullScreen={toggleBackdrop}
+            />
           ))}
         </div>
       ) : (
         <>
-          <p>Upload a video, then click the images you want to download!</p>
+          <p className="description">
+            Upload a video, then click the images you want to download!
+          </p>
           <p className="notice">
             <strong>Note:</strong> The video stays safely on your device. It's
             never actually uploaded anywhere. You can test this by opening this
@@ -72,6 +75,8 @@ export default function App() {
           </p>
         </>
       )}
+
+      <div className="backdrop" hidden={!showBackdrop} />
     </div>
   );
 }
