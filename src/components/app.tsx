@@ -1,9 +1,10 @@
-import { ChangeEvent, useState } from "react";
-import { Grid } from "react-loader-spinner";
+import { ChangeEvent, useRef, useState } from "react";
+
 import { BackdropContext } from "../contexts/backdrop-context";
+import "../styles.css";
 import { VideoToFrames } from "../utils/video-to-frame";
 import { ImageList } from "./image-list/image-list";
-import "../styles.css";
+import { UploadForm } from "./upload-form/upload-form";
 
 type Status = "IDLE" | "LOADING";
 
@@ -11,6 +12,9 @@ export default function App() {
   const [images, setImages] = useState<Array<string>>([]);
   const [status, setStatus] = useState<Status>("IDLE");
   const [showBackdrop, setShowBackdrop] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const VTF = useRef(new VideoToFrames({ onProgress: setProgress }));
 
   async function onInput(event: ChangeEvent<HTMLInputElement>) {
     setImages([]);
@@ -18,39 +22,27 @@ export default function App() {
 
     const [file] = Array.from(event.target.files ?? []);
     const fileUrl = URL.createObjectURL(file);
-    const frames = await VideoToFrames.getFrames(fileUrl, 30, "TotalFrames");
+    const frames = await VTF.current.getFrames(fileUrl, 30, "TotalFrames");
 
     setStatus("IDLE");
     setImages(frames);
   }
 
-  const toggleBackdrop = () => {
-    if (showBackdrop) {
-      document.body.classList.remove("overflow-hidden");
-    } else {
-      document.body.classList.add("overflow-hidden");
-    }
+  // const toggleBackdrop = () => {
+  //   if (showBackdrop) {
+  //     document.body.classList.remove("overflow-hidden");
+  //   } else {
+  //     document.body.classList.add("overflow-hidden");
+  //   }
 
-    setShowBackdrop(!showBackdrop);
-  };
+  //   setShowBackdrop(!showBackdrop);
+  // };
 
   return (
     <BackdropContext.Provider value={[showBackdrop, setShowBackdrop]}>
       <div className="container">
         <h1>Get the frames from your video&nbsp;🎞</h1>
-        <label>
-          {status === "IDLE" ? (
-            "Choose file"
-          ) : (
-            <Grid color="#00BFFF" height={100} width={100} />
-          )}
-          <input
-            type="file"
-            className="visually-hidden"
-            accept="video/*"
-            onChange={(event) => onInput(event)}
-          />
-        </label>
+        <UploadForm onInput={onInput} progress={progress} status={status} />
 
         {images?.length > 0 ? (
           <ImageList imageUrls={images} />

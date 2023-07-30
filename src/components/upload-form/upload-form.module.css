@@ -1,0 +1,16 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.progress:not([hidden]) {
+  margin-top: 1rem;
+}
+
+.progress[hidden] {
+  display: block;
+  max-height: 0;
+  transition: max-height 0.25s ease-out;
+}

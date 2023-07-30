@@ -1,6 +1,20 @@
 import * as isIOS from "is-ios";
 
 export class VideoToFrames {
+  private onProgress: (progress: number) => void = () => {};
+  private _progress: number = 0;
+
+  set progress(progress: number) {
+    this.onProgress(progress);
+    this._progress = progress;
+  }
+
+  constructor({ onProgress }: { onProgress?: (progress: number) => void }) {
+    if (onProgress) {
+      this.onProgress = onProgress;
+    }
+  }
+
   /**
    * Extracts frames from the video and returns them as an array of imageData
    *
@@ -8,18 +22,21 @@ export class VideoToFrames {
    * @param amount number of frames per second or total number of frames that you want to extract
    * @param type The method of extracting frames: Number of frames per second of video or the total number of frames across the whole video duration. Defaults to fps
    */
-  static getFrames(
+  getFrames(
     videoUrl: string,
     amount: number,
     type: "FPS" | "TotalFrames" = "FPS",
   ): Promise<Array<string>> {
+    this.progress = 0;
+
     return new Promise<Array<string>>((resolve) => {
-      let frames: Array<string> = [];
-      let canvas = document.createElement("canvas");
-      let context = canvas.getContext("2d")!;
-      let duration: number;
-      let video = document.createElement("video");
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d")!;
+      const video = document.createElement("video");
       video.preload = "auto";
+
+      let frames: Array<string> = [];
+      let duration: number;
 
       video.addEventListener("loadeddata", async () => {
         canvas.width = video.videoWidth;
@@ -35,6 +52,8 @@ export class VideoToFrames {
           frames.push(
             await VideoToFrames.getVideoFrame(video, context, canvas, time),
           );
+
+          this.progress = Math.round((time / duration) * 100);
         }
 
         if (isIOS) {
@@ -59,7 +78,7 @@ export class VideoToFrames {
       video.addEventListener(
         "seeked",
         () => {
-          this.storeFrame(video, context, canvas, resolve);
+          VideoToFrames.storeFrame(video, context, canvas, resolve);
         },
         {
           once: true,
