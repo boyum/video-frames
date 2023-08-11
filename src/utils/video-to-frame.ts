@@ -4,7 +4,11 @@ export class VideoToFrames {
   private onProgress: (progress: number) => void = () => {};
   private _progress: number = 0;
 
-  set progress(progress: number) {
+  private get progress(): number {
+    return this._progress;
+  }
+
+  private set progress(progress: number) {
     this.onProgress(progress);
     this._progress = progress;
   }
