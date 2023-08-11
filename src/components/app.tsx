@@ -40,28 +40,41 @@ export default function App() {
 
   return (
     <BackdropContext.Provider value={[showBackdrop, setShowBackdrop]}>
-      <div className="container">
-        <h1>Get the frames from your video&nbsp;🎞</h1>
-        <UploadForm onInput={onInput} progress={progress} status={status} />
+      <div className="page">
+        <div className="container">
+          <h1>Get the frames from your video&nbsp;🎞</h1>
+          <UploadForm onInput={onInput} progress={progress} status={status} />
 
-        {images?.length > 0 ? (
-          <ImageList imageUrls={images} />
-        ) : (
-          <>
-            <p className="description">
-              Upload a video, then click the images you want to download!
-            </p>
-            <p className="notice">
-              <strong>Note:</strong> The video stays safely on your device. It's
-              never actually uploaded anywhere. You can test this by opening
-              this site, then disconnect from the internet before you start
-              using it.
-            </p>
-          </>
-        )}
+          {images?.length > 0 ? (
+            <ImageList imageUrls={images} />
+          ) : (
+            <>
+              <p className="description">
+                Upload a video, then click the images you want to download!
+              </p>
+              <p className="notice">
+                <strong>Note:</strong> The video stays safely on your device.
+                It's never actually uploaded anywhere. You can test this by
+                opening this site, then disconnect from the internet before you
+                start using it.
+              </p>
+            </>
+          )}
+        </div>
 
-        <div className="backdrop" hidden={!showBackdrop} />
+        <footer>
+          <p>
+            Made with ❤️ by <a href="https://sinre.dev">Sindre</a>.
+            <br />
+            <a href="https://github.com/boyum/video-frames">
+              Source code on GitHub
+            </a>
+            .
+          </p>
+        </footer>
       </div>
+
+      <div className="backdrop" hidden={!showBackdrop} />
     </BackdropContext.Provider>
   );
 }
