@@ -33,7 +33,7 @@ export class VideoToFrames {
   ): Promise<Array<string>> {
     this.progress = 0;
 
-    return new Promise<Array<string>>((resolve) => {
+    return new Promise<Array<string>>(resolve => {
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d")!;
       const video = document.createElement("video");
@@ -78,7 +78,7 @@ export class VideoToFrames {
     canvas: HTMLCanvasElement,
     time: number,
   ): Promise<string> {
-    return new Promise<string>((resolve) => {
+    return new Promise<string>(resolve => {
       video.addEventListener(
         "seeked",
         () => {

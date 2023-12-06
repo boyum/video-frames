@@ -24,7 +24,7 @@ export const UploadForm: FC<Props> = ({ onInput, progress, status }) => {
         type="file"
         className="visually-hidden"
         accept="video/*"
-        onChange={(event) => onInput(event)}
+        onChange={event => onInput(event)}
       />
     </label>
   );
