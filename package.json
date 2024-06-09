@@ -14,7 +14,7 @@
     "prettier": "^3.2.5",
     "prettier-config": "github:boyum/prettier-config",
     "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "vite": "^5.2.13"
   },
   "scripts": {
     "start": "vite",
