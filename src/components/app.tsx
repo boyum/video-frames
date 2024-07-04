@@ -1,5 +1,5 @@
-import { ChangeEvent, useRef, useState } from "react";
-
+import type { ChangeEvent } from "react";
+import { useRef, useState } from "react";
 import { BackdropContext } from "../contexts/backdrop-context";
 import "../styles.css";
 import { VideoToFrames } from "../utils/video-to-frame";
