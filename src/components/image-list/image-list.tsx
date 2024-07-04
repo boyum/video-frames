@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { Image } from "../image/image";
 import styles from "./image-list.module.css";
 

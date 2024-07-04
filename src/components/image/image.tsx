@@ -1,4 +1,5 @@
-import { FC, MouseEventHandler, useState } from "react";
+import type { FC, MouseEventHandler } from "react";
+import { useState } from "react";
 import { useBackdrop } from "../../hooks/use-backdrop";
 import classes from "./image.module.css";
 
@@ -19,7 +20,7 @@ export const Image: FC<Props> = ({ imageUrl, index }) => {
   };
 
   return (
-    <button onClick={handleClick} className={classes.button}>
+    <button onClick={handleClick} className={classes.button} type="button">
       <img
         src={imageUrl}
         alt={`Frame number ${index + 1}`}

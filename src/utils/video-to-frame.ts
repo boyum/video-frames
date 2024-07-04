@@ -2,7 +2,7 @@ import * as isIOS from "is-ios";
 
 export class VideoToFrames {
   private onProgress: (progress: number) => void = () => {};
-  private _progress: number = 0;
+  private _progress = 0;
 
   private get progress(): number {
     return this._progress;
@@ -35,11 +35,12 @@ export class VideoToFrames {
 
     return new Promise<Array<string>>(resolve => {
       const canvas = document.createElement("canvas");
+      // biome-ignore lint/style/noNonNullAssertion: We know that the context exists
       const context = canvas.getContext("2d")!;
       const video = document.createElement("video");
       video.preload = "auto";
 
-      let frames: Array<string> = [];
+      const frames: Array<string> = [];
       let duration: number;
 
       video.addEventListener("loadeddata", async () => {
