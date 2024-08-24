@@ -1,7 +1,9 @@
 import * as isIOS from "is-ios";
 
 export class VideoToFrames {
-  private onProgress: (progress: number) => void = () => {};
+  private static numberOfExtractedFramesPerSecond = 10;
+
+  private onProgress: (progress: number) => void;
   private _progress = 0;
 
   private get progress(): number {
@@ -13,30 +15,26 @@ export class VideoToFrames {
     this._progress = progress;
   }
 
-  constructor({ onProgress }: { onProgress?: (progress: number) => void }) {
-    if (onProgress) {
-      this.onProgress = onProgress;
-    }
+  constructor({ onProgress }: { onProgress: (progress: number) => void }) {
+    this.onProgress = onProgress;
   }
 
   /**
    * Extracts frames from the video and returns them as an array of imageData
    *
    * @param videoUrl url to the video file (html5 compatible format) eg: mp4
-   * @param amount number of frames per second or total number of frames that you want to extract
-   * @param type The method of extracting frames: Number of frames per second of video or the total number of frames across the whole video duration. Defaults to fps
    */
-  getFrames(
-    videoUrl: string,
-    amount: number,
-    type: "FPS" | "TotalFrames" = "FPS",
-  ): Promise<Array<string>> {
+  getFrames(videoUrl: string): Promise<Array<string>> {
     this.progress = 0;
 
     return new Promise<Array<string>>(resolve => {
       const canvas = document.createElement("canvas");
-      // biome-ignore lint/style/noNonNullAssertion: We know that the context exists
-      const context = canvas.getContext("2d")!;
+      const context = canvas.getContext("2d");
+
+      if (!context) {
+        throw new Error("2d context not supported");
+      }
+
       const video = document.createElement("video");
       video.preload = "auto";
 
@@ -47,11 +45,9 @@ export class VideoToFrames {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         duration = video.duration;
-        let totalFrames = amount;
 
-        if (type === "FPS") {
-          totalFrames = duration * amount;
-        }
+        const totalFrames =
+          duration * VideoToFrames.numberOfExtractedFramesPerSecond;
 
         for (let time = 0; time < duration; time += duration / totalFrames) {
           frames.push(
