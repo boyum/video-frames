@@ -38,7 +38,7 @@ export class VideoToFrames {
       const video = document.createElement("video");
       video.preload = "auto";
 
-      const frames: Array<string> = [];
+      const frames: Array<Promise<{ time: number; url: string }>> = [];
       let duration: number;
 
       video.addEventListener("loadeddata", async () => {
@@ -51,7 +51,7 @@ export class VideoToFrames {
 
         for (let time = 0; time < duration; time += duration / totalFrames) {
           frames.push(
-            await VideoToFrames.getVideoFrame(video, context, canvas, time),
+            VideoToFrames.getVideoFrame(video, context, canvas, time),
           );
 
           this.progress = Math.round((time / duration) * 100);
@@ -61,7 +61,14 @@ export class VideoToFrames {
           frames.splice(0, 1);
         }
 
-        resolve(frames);
+        // Resolve all promises and sort them by time, in case they are not in order
+        // (for instance, frame 1 might take longer time to process than frame 2).
+
+        resolve(
+          (await Promise.all(frames))
+            .sort((a, b) => a.time - b.time)
+            .map(frame => frame.url),
+        );
       });
 
       video.src = videoUrl;
@@ -74,12 +81,12 @@ export class VideoToFrames {
     context: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
     time: number,
-  ): Promise<string> {
-    return new Promise<string>(resolve => {
+  ): Promise<{ time: number; url: string }> {
+    return new Promise<{ time: number; url: string }>(resolve => {
       video.addEventListener(
         "seeked",
         () => {
-          VideoToFrames.storeFrame(video, context, canvas, resolve);
+          VideoToFrames.storeFrame(video, context, canvas, time, resolve);
         },
         {
           once: true,
@@ -94,9 +101,10 @@ export class VideoToFrames {
     video: HTMLVideoElement,
     context: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
-    resolve: (value: string) => void,
+    time: number,
+    resolve: (value: { time: number; url: string }) => void,
   ) {
     context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-    resolve(canvas.toDataURL());
+    resolve({ time, url: canvas.toDataURL() });
   }
 }
