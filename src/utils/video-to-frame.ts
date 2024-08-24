@@ -1,7 +1,7 @@
-import * as isIOS from "is-ios";
+import isIOS from "is-ios";
 
 export class VideoToFrames {
-  private static numberOfExtractedFramesPerSecond = 10;
+  private static numberOfExtractedFramesPerSecond = 5;
 
   private onProgress: (progress: number) => void;
   private _progress = 0;
