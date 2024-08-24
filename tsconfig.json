@@ -3,8 +3,9 @@
     "jsx": "react-jsx",
     "noEmit": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "strict": true
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "lib": ["ESNext", "DOM"]
   },
   "include": ["src", "index.d.ts"]
 }
