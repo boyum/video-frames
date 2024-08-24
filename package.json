@@ -1,5 +1,6 @@
 {
   "name": "video-frames",
+  "type": "module",
   "dependencies": {
     "is-ios": "^2.1.1",
     "react": "18.3.1",

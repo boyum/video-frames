@@ -22,21 +22,11 @@ export default function App() {
 
     const [file] = Array.from(event.target.files ?? []);
     const fileUrl = URL.createObjectURL(file);
-    const frames = await VTF.current.getFrames(fileUrl, 30, "TotalFrames");
+    const frames = await VTF.current.getFrames(fileUrl);
 
     setStatus("IDLE");
     setImages(frames);
   }
-
-  // const toggleBackdrop = () => {
-  //   if (showBackdrop) {
-  //     document.body.classList.remove("overflow-hidden");
-  //   } else {
-  //     document.body.classList.add("overflow-hidden");
-  //   }
-
-  //   setShowBackdrop(!showBackdrop);
-  // };
 
   return (
     <BackdropContext.Provider value={[showBackdrop, setShowBackdrop]}>
