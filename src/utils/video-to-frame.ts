@@ -1,6 +1,7 @@
 import isIOS from "is-ios";
 
-const frameRateQueryParam = new URLSearchParams(location.search).get("frames");
+const queryParams = new URLSearchParams(location.search);
+const frameRateQueryParam = queryParams.get("frames") ?? queryParams.get("f");
 const numberOfExtractedFramesPerSecond = frameRateQueryParam
   ? Number.parseInt(frameRateQueryParam, 10)
   : 5;
@@ -60,7 +61,7 @@ export class VideoToFrames {
         }
 
         this.progress = 100;
-        
+
         if (isIOS) {
           frames.splice(0, 1);
         }
