@@ -5,6 +5,10 @@
   justify-content: center;
 }
 
+.progress::-webkit-progress-value {
+  transition: width 1s;
+}
+
 .progress:not([hidden]) {
   margin-top: 1rem;
 }

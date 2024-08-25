@@ -1,8 +1,11 @@
 import isIOS from "is-ios";
 
-export class VideoToFrames {
-  private static numberOfExtractedFramesPerSecond = 5;
+const frameRateQueryParam = new URLSearchParams(location.search).get("frames");
+const numberOfExtractedFramesPerSecond = frameRateQueryParam
+  ? Number.parseInt(frameRateQueryParam, 10)
+  : 5;
 
+export class VideoToFrames {
   private onProgress: (progress: number) => void;
   private _progress = 0;
 
@@ -38,7 +41,7 @@ export class VideoToFrames {
       const video = document.createElement("video");
       video.preload = "auto";
 
-      const frames: Array<Promise<{ time: number; url: string }>> = [];
+      const frames: Array<{ time: number; url: string }> = [];
       let duration: number;
 
       video.addEventListener("loadeddata", async () => {
@@ -46,29 +49,23 @@ export class VideoToFrames {
         canvas.height = video.videoHeight;
         duration = video.duration;
 
-        const totalFrames =
-          duration * VideoToFrames.numberOfExtractedFramesPerSecond;
+        const totalFrames = duration * numberOfExtractedFramesPerSecond;
 
         for (let time = 0; time < duration; time += duration / totalFrames) {
           frames.push(
-            VideoToFrames.getVideoFrame(video, context, canvas, time),
+            await VideoToFrames.getVideoFrame(video, context, canvas, time),
           );
 
           this.progress = Math.round((time / duration) * 100);
         }
 
+        this.progress = 100;
+        
         if (isIOS) {
           frames.splice(0, 1);
         }
 
-        // Resolve all promises and sort them by time, in case they are not in order
-        // (for instance, frame 1 might take longer time to process than frame 2).
-
-        resolve(
-          (await Promise.all(frames))
-            .sort((a, b) => a.time - b.time)
-            .map(frame => frame.url),
-        );
+        resolve(frames.map(frame => frame.url));
       });
 
       video.src = videoUrl;
