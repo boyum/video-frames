@@ -35,7 +35,7 @@ export default function App() {
           <h1>Get the frames from your video&nbsp;🎞</h1>
           <UploadForm onInput={onInput} progress={progress} status={status} />
 
-          {images?.length > 0 ? (
+          {images.length > 0 ? (
             <ImageList imageUrls={images} />
           ) : (
             <>
@@ -45,8 +45,8 @@ export default function App() {
               <p className="notice">
                 <strong>Note:</strong> The video stays safely on your device.
                 It's never actually uploaded anywhere. You can test this by
-                opening this site, then disconnect from the internet before you
-                start using it.
+                opening this site, then disconnecting from the internet before
+                you start using it.
               </p>
             </>
           )}
