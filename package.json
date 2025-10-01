@@ -3,12 +3,12 @@
   "type": "module",
   "dependencies": {
     "is-ios": "^2.1.1",
-    "react": "19.1.1",
+    "react": "19.2.0",
     "react-dom": "19.1.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/react": "^19.1.16",
+    "@types/react": "^19.2.0",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.4",
     "typescript": "^5.9.2",
